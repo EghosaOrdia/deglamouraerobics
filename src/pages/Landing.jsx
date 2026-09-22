@@ -402,7 +402,7 @@ const CharityAndCommunity = () => {
         </div>
 
         <div className="relative mx-auto">
-          <div className="absolute -left-10 lg:-left-30 inline-flex gap-3 items-start bg-primary rounded-3xl p-4">
+          <div className="absolute -left-5 top-10 lg:-left-30 inline-flex gap-3 items-start bg-primary rounded-3xl p-4">
             <div className="bg-green-light rounded-full p-2 overflow-hidden">
               <HeartIcon size={15} />
             </div>
@@ -417,7 +417,7 @@ const CharityAndCommunity = () => {
             </p>
           </div>
 
-          <div className="absolute bottom-50 -right-10 lg:-right-30 inline-flex gap-3 items-start bg-primary rounded-3xl p-4">
+          <div className="absolute bottom-30 -right-5 lg:-right-30 inline-flex gap-3 items-start bg-primary rounded-3xl p-4">
             <div className="bg-green-light rounded-full p-2 overflow-hidden">
               <StarIcon size={30} />
             </div>
