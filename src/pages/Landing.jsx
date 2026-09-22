@@ -325,7 +325,7 @@ const Community = () => {
   };
 
   return (
-    <section id="community">
+    <section id="community overflow-hidden">
       <motion.div
         initial="hidden"
         whileInView="visible"
