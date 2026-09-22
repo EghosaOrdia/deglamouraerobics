@@ -11,6 +11,7 @@ import aboutThree from "../assets/about-3.jpg";
 import aboutFour from "../assets/about-4.jpg";
 import aboutFive from "../assets/about-5.jpeg";
 import aboutSix from "../assets/about-6.jpeg";
+import charity from "../assets/charity.mp4";
 
 export const MEDIA = {
   Logo,
@@ -26,6 +27,7 @@ export const MEDIA = {
   aboutFour,
   aboutFive,
   aboutSix,
+  charity,
 };
 
 export const postImages = [

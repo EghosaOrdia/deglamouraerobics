@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRightIcon, FacebookLogoIcon } from "@phosphor-icons/react";
+import {
+  ArrowRightIcon,
+  FacebookLogoIcon,
+  HeartIcon,
+  MapPinIcon,
+  PhoneCallIcon,
+  StarIcon,
+} from "@phosphor-icons/react";
 import {
   useScroll,
   useTransform,
@@ -179,7 +186,7 @@ const About = () => {
             </a>
           </div>
 
-          <div className="relative mt-12">
+          <div className="relative mt-12 overflow-hidden">
             <motion.div
               variants={container}
               initial="hidden"
@@ -367,6 +374,74 @@ const Community = () => {
   );
 };
 
+const CharityAndCommunity = () => {
+  return (
+    <section>
+      <div className="pt-24 pb-12 px-8 md:px-16 flex flex-col lg:flex-row justify-center items-start gap-8">
+        <div className="">
+          <span className="inline-flex uppercase text-sm font-semibold text-primary border-b-4 border-green-light tracking-wide pb-2">
+            Charity & Community
+          </span>
+          <h2 className="font-bold text-3xl md:text-4xl text-primary mt-4">
+            More Than Fitness <br />
+            <span className="text-green-light">We Give Back</span>
+          </h2>
+          <p className="max-w-xl text-primary/80 mt-2">
+            At De-glamour aerobics, we believe in building stronger communities.
+            Through our charity initiatives, we support, uplift and create
+            opportunities for those in need - because a healthier community is a
+            happier one.
+          </p>
+          <a
+            href="tel:08033453412"
+            className="btn inline-flex items-center gap-4 mt-8"
+          >
+            Get Directions
+            <ArrowRightIcon />
+          </a>
+        </div>
+
+        <div className="relative mx-auto">
+          <div className="absolute -left-10 lg:-left-30 inline-flex gap-3 items-start bg-primary rounded-3xl p-4">
+            <div className="bg-green-light rounded-full p-2 overflow-hidden">
+              <HeartIcon size={15} />
+            </div>
+            <p className="px-2 flex flex-col">
+              <span className="text-green-light/60 text-xs">
+                Essential Items
+              </span>
+              <span className="font-bold text-lg leading-5 text-green-light">
+                Distributed
+              </span>
+              <span className="text-green-light/60 text-xs">
+                Food | Hygeine | School supplies
+              </span>
+            </p>
+          </div>
+
+          <div className="absolute bottom-50 -right-10 lg:-right-30 inline-flex gap-3 items-start bg-primary rounded-3xl p-4">
+            <div className="bg-green-light rounded-full p-2 overflow-hidden">
+              <StarIcon size={30} />
+            </div>
+            <p className="px-2 flex flex-col">
+              <span className="text-green-light/60 text-xs">Continuous</span>
+              <span className="font-bold text-lg leading-5 text-green-light">
+                Support
+              </span>
+              <span className="text-green-light/60 text-xs">
+                For a better Nigeria
+              </span>
+            </p>
+          </div>
+          <div className="rounded-full overflow-hidden">
+            <video src={MEDIA.charity} autoPlay loop muted playsInline />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const CTA = () => {
   return (
     <section>
@@ -412,28 +487,54 @@ const CTA = () => {
 const FindUs = () => {
   return (
     <section>
-      <div className="pt-24 pb-12 px-8 md:px-16">
-        <div className="mx-auto text-center">
-          <h2 className="font-bold text-3xl md:text-4xl text-primary">
-            Our Location
+      <div className="pt-24 pb-12 px-8 md:px-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="">
+          <span className="inline-flex uppercase text-sm font-semibold text-primary border-b-4 border-green-light tracking-wide pb-2">
+            Come train with us
+          </span>
+          <h2 className="font-bold text-3xl md:text-4xl text-primary mt-4">
+            Find us in Suleja
           </h2>
-          <p className="max-w-xl mx-auto mt-2">
-            Interested in finding us? Here's our address. Alternatively, you
-            could call us on this line:
+          <p className="max-w-xl text-primary/80 mt-2">
+            We'd love to have you at our sessions! Our community is always open,
+            welcoming new faces and creating a healthier, happier you.
+          </p>
+          <div className="flex items-start gap-2 max-w-lg mt-4">
+            <MapPinIcon className="text-green-light" size={40} />
+            <a
+              href="https://maps.app.goo.gl/J9d9FSx4wX8KfhkW8"
+              target="_blank"
+              className="inline-flex text-xl text-primary/80 hover:text-green-light hover:underline"
+            >
+              Old NNPC Guest House Opposite Gym N. Suleja, Nigeria
+            </a>
+          </div>
+
+          <div className="flex items-center gap-4 mt-8">
+            <a href="tel:08033453412" className="btn flex items-center gap-4">
+              Get Directions
+              <ArrowRightIcon />
+            </a>
+            <div className="h-4 w-px bg-primary/40"></div>
             <a
               href="tel:08033453412"
-              className="font-medium text-green-light underline"
+              className="flex items-center gap-4 font-bold text-primary hover:text-green-light hover:underline"
             >
+              <PhoneCallIcon size={20} />
               08033453412
             </a>
-          </p>
-          <a
-            href="https://www.facebook.com/profile.php?id=61591570243945"
-            target="_blank"
-            className="inline-flex text-xl mt-4 font-medium hover:text-green-light hover:underline"
-          >
-            Old NNPC Guest House Opposite Gym N. Suleja, Nigeria
-          </a>
+          </div>
+        </div>
+        <div className="">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3938.344786771194!2d7.194985174154519!3d9.213424486076564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104dd1497481073b%3A0xd155da7b548a61ee!2sNNPC%20Guest%20House!5e0!3m2!1sen!2sng!4v1790062741912!5m2!1sen!2sng"
+            width="100%"
+            height="450"
+            style={{ border: 0 }}
+            allowFullscreen=""
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+          ></iframe>
         </div>
       </div>
     </section>
@@ -443,13 +544,13 @@ const FindUs = () => {
 const Footer = () => {
   return (
     <footer>
-      <div className="py-8 px-8 lg:pb-12 lg:pt-24 lg:px-16 bg-[#eee]">
-        <div className="flex flex-col gap-4 lg:flex-row justify-between">
+      <div className="py-8 px-8 lg:pb-12 lg:pt-24 lg:px-16 flex justify-between items-center flex-wrap gap-y-8 bg-primary text-white">
+        <div className="flex flex-col gap-4 justify-between">
           <a href="" className="flex gap-2 items-center">
             <img
               src={MEDIA.Logo}
               alt="De-glamour aerobics logo"
-              className="w-16 invert"
+              className="w-16"
             />
             <span className="leading-none">
               <span className="font-bold">De-glamour</span>
@@ -458,38 +559,32 @@ const Footer = () => {
             </span>
           </a>
 
-          <div className="">
-            <p>Have questions or feedback? Reach out to our team at</p>
-            <a
-              href="mailto:osasgallanta@yahoo.com"
-              className="text-3xl lg:text-5xl font-medium hover:text-green-light hover:underline"
-            >
-              osasgallanta@yahoo.com
-            </a>
-          </div>
-
-          <div className="">
-            <p>Give us as call at</p>
-            <a
-              href="tel:08033453412"
-              className="text-3xl lg:text-5xl font-medium hover:text-green-light hover:underline"
-            >
-              08033453412
-            </a>
-          </div>
+          <p className="lg:max-w-lg">
+            A supportive fitness community where we move, grow and live
+            healthier - together.
+          </p>
         </div>
 
-        <nav className="gap-4 items-center flex py-2 mt-4">
-          <a href="#about" className="">
-            About
+        <div className="h-20 w-px bg-green-light"></div>
+
+        <div className="flex flex-col gap-2">
+          <span className="text-green-light inline-flex font-semibold">
+            LET'S TALK
+          </span>
+          <a
+            href="mailto:osasgallanta@yahoo.com"
+            className="text-xl font-medium"
+          >
+            osasgallanta@yahoo.com
           </a>
-          <a href="#community" className="">
-            Community
+          <a
+            href="tel:08033453412"
+            className="flex items-center gap-4 text-xl font-medium hover:text-green-light hover:underline"
+          >
+            <PhoneCallIcon size={21} className="text-green-light" />
+            08033453412
           </a>
-          <a href="#joinus" className="">
-            Join us
-          </a>
-        </nav>
+        </div>
       </div>
     </footer>
   );
@@ -502,6 +597,7 @@ export default function Landing() {
       <Hero />
       <About />
       <Community />
+      <CharityAndCommunity />
       <CTA />
       <FindUs />
       <Footer />
