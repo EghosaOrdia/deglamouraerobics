@@ -563,7 +563,7 @@ const Footer = () => {
           </p>
         </div>
 
-        <div className="h-20 w-px bg-green-light"></div>
+        <div className="hidden lg:block h-20 w-px bg-green-light"></div>
 
         <div className="flex flex-col gap-2">
           <span className="text-green-light inline-flex font-semibold">
