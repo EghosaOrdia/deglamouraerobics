@@ -407,13 +407,11 @@ const CharityAndCommunity = () => {
               <HeartIcon size={15} />
             </div>
             <p className="px-2 flex flex-col">
-              <span className="text-green-light/60 text-xs">
-                Essential Items
-              </span>
+              <span className="text-green-light text-xs">Essential Items</span>
               <span className="font-bold text-lg leading-5 text-green-light">
                 Distributed
               </span>
-              <span className="text-green-light/60 text-xs">
+              <span className="text-green-light text-xs">
                 Food | Hygeine | School supplies
               </span>
             </p>
