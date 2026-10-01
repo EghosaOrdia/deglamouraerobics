@@ -1,604 +1,292 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  ArrowRightIcon,
-  FacebookLogoIcon,
-  HeartIcon,
-  MapPinIcon,
-  PhoneCallIcon,
-  StarIcon,
-} from "@phosphor-icons/react";
-import {
-  useScroll,
-  useTransform,
-  motion,
-  useMotionValueEvent,
-} from "framer-motion";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/effect-coverflow";
-import {
-  A11y,
-  EffectCoverflow,
-  FreeMode,
-  Navigation,
-  Pagination,
-  Scrollbar,
-} from "swiper/modules";
-import { MEDIA, postImages } from "../lib/constants";
+import hero from "../assets/hero.jpg";
+import hikeImg from "../assets/hikeFlyer.jpeg";
+import charity from "../assets/charity.jpg";
 
-const Header = () => {
-  const { scrollY } = useScroll();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollHeight, setScrollHeight] = useState(0);
+const facebook = "https://www.facebook.com/profile.php?id=61591570243945";
+const activities = [
+  {
+    title: "Move",
+    text: "High-energy aerobics, full-body workouts and music loud enough to wake the whole street.",
+    styles:
+      "bg-primary text-primary-foreground rounded-xl p-8 transition hover:-translate-y-2 ",
+  },
+  {
+    title: "Explore",
+    text: "We trade the floor for the mountains — group hikes that test your legs and bond the crew.",
+    styles:
+      "bg-secondary text-secondary-foreground rounded-xl p-8 transition hover:-translate-y-2 md:translate-y-10",
+  },
+  {
+    title: "Give",
+    text: "Outreach, food drives and support for families who need it. Strong bodies, bigger hearts.",
+    styles:
+      "bg-accent text-accent-foreground rounded-xl p-8 transition hover:-translate-y-2 ",
+  },
+];
+const words = ["SWEAT", "HIKE", "GIVE BACK", "DANCE", "FAMILY", "REPEAT"];
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 50);
-    setScrollHeight(latest);
-  });
-
+function Marquee({ reverse = false }) {
+  const items = [...words, ...words, ...words];
   return (
-    <header className="fixed w-full top-0 z-999 p-2">
-      <div
-        className={`max-w-2xl bg-primary/20 backdrop-blur-md rounded-full md:max-w-3/5 flex justify-between items-center px-4 md:px-20 py-4 transition-all duration-300 mx-auto`}
-      >
-        <motion.a
-          href=""
-          className="flex gap-2 items-center"
-          transition={{ duration: 1.2, ease: "easeInOut" }}
-        >
-          <img
-            src={MEDIA.Logo}
-            alt="De-glamour aerobics logo"
-            className={`w-12 ${scrollHeight > 788 ? "invert" : ""}`}
-          />
-          <span
-            className={`text-sm leading-none ${scrollHeight > 788 ? "text-black" : "text-white"}`}
-          >
-            <span className="font-bold">De-glamour</span>
-            <br />
-            <span>aerobics</span>
+    <div
+      className={`relative overflow-hidden py-4 bg-primary text-primary-foreground z-10 ${reverse ? "marquee--reverse" : ""}`}
+      aria-hidden="true"
+    >
+      <div className="marquee__track flex w-max animate-marquee gap-10 whitespace-nowrap font-anton text-3xl md:text-5xl">
+        {items.map((word, index) => (
+          <span key={`${word}-${index}`}>
+            {word}
+            <b>✦</b>
           </span>
-        </motion.a>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-        <motion.nav
-          className={`gap-4 items-center scrollFadeInLeft ${isScrolled ? "hidden" : "hidden md:flex"}`}
-        >
-          <a href="#about" className="navLink">
-            About
-          </a>
-          <a href="#community" className="navLink">
-            Community
-          </a>
-          <a href="#joinus" className="navLink">
-            Join us
-          </a>
-        </motion.nav>
+export default function App() {
+  return (
+    <main className="relative font-bricolage-grotesque">
+      <header className="flex items-center justify-between py-4 px-8 fixed top-0 w-full z-50">
+        <a className="font-anton text-white text-2xl uppercase" href="#top">
+          De-glamour<span>.</span>
+        </a>
 
         <a
-          href="https://www.facebook.com/profile.php?id=61591570243945"
-          target="_blank"
-          className={`btn items-center gap-2 text-sm zoomFadeRightIn flex`}
+          className="rounded-full bg-primary px-5 py-2 text-sm font-extrabold uppercase text-primary-foreground font-bricolage-grotesque transition hover:scale-105"
+          href={facebook}
         >
-          <FacebookLogoIcon size={15} />
-          Follow us
-          <ArrowRightIcon size={15} />
+          Join us
         </a>
-      </div>
-    </header>
-  );
-};
+      </header>
 
-const Hero = () => {
-  const videoScrollRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkSize = () => setIsMobile(window.innerWidth < 768);
-    checkSize();
-    window.addEventListener("resize", checkSize);
-    return () => window.removeEventListener("resize", checkSize);
-  }, []);
-
-  const { scrollYProgress } = useScroll({
-    target: videoScrollRef,
-    offset: ["start end", "end start"],
-  });
-
-  const width = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    isMobile
-      ? ["90vw", "96vw", "90vw"] // mobile: small growth range, stays within screen bounds
-      : ["48rem", "80vw", "48rem"], // desktop: your original values
-  );
-  return (
-    <section className="relative hero">
-      <div className="overlay bg-primary/50 absolute w-full h-full top-0"></div>
-      <div className="relative py-32 px-8 md:px-20 z-10">
-        <div className="relative max-w-3xl mx-auto text-center z-20">
-          <h1 className="text-white text-5xl md:text-8xl leading-10 md:leading-18 tracking-tighter font-semibold scrollFadeInUp">
-            Move your Body, Lift Your Mood
-          </h1>
-          <p className="my-4 text-white scrollFadeInUpDelay">
-            De-glamour aerobics is a supportive fitness and one big family where
-            we encourage a healthy lifestyle through working out and having fun.
-          </p>
-        </div>
-
-        {/* scroll-tracking wrapper — gives room for the grow/shrink journey */}
-        <div
-          ref={videoScrollRef}
-          className="relative flex items-center justify-center mt-16"
-        >
-          <motion.div
-            style={{ width, aspectRatio: "16 / 9" }}
-            className="relative rounded-2xl overflow-hidden bg-blue-100 group mx-auto z-10"
-          >
-            <div className="absolute w-full h-full top-0 z-30 bg-black/0 group-hover:bg-black/50 cursor-pointer flex">
-              <a href="" className="text-white m-auto hover:text-primary">
-                <FacebookLogoIcon size={100} />
-              </a>
-            </div>
-            <video
-              src={MEDIA.heroVideo}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            ></video>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const About = () => {
-  const container = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.1 } },
-  };
-
-  return (
-    <section className="relative">
-      <div className="overflow-hidden flex items-center">
-        <div className="pt-12 px-4 md:px-20 w-full items-center">
-          <div className=" text-center">
-            <h2 className="font-bold text-3xl md:text-5xl text-primary">
-              Find Your Rythm
-            </h2>
-            <p className="mt-2 text-sm md:text-base max-w-lg mx-auto">
-              From high-energy aerobics to full-body workouts, our sessions are
-              designed to keep you moving, motivated and feeling great.
-            </p>
-            <a
-              href="https://www.facebook.com/profile.php?id=61591570243945"
-              target="_blank"
-              className="btn inline-flex text-xs md:text-sm font-semibold items-center gap-2 mt-4 zoomFadeInUpDelay"
-            >
-              Follow us on Facebook
-              <ArrowRightIcon />
-            </a>
-          </div>
-
-          <div className="relative mt-12 overflow-hidden">
-            <motion.div
-              variants={container}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
-            >
-              <Swiper
-                modules={[
-                  Navigation,
-                  Pagination,
-                  Scrollbar,
-                  A11y,
-                  EffectCoverflow,
-                  FreeMode,
-                ]}
-                spaceBetween={4}
-                slidesPerGroup={1}
-                slidesOffsetBefore={10}
-                slidesOffsetAfter={4}
-                initialSlide={1}
-                centeredSlides={true}
-                roundLengths={true}
-                loop={true}
-                effect="coverflow"
-                coverflowEffect={{
-                  rotate: 30,
-                  depth: 30,
-                  modifier: 2,
-                }}
-                freeMode={{
-                  enabled: true,
-                  sticky: true,
-                }}
-                breakpoints={{
-                  0: {
-                    slidesPerView: 1.4, // shows a peek of the next slide — common mobile carousel pattern
-                    coverflowEffect: { rotate: 15, depth: 15, modifier: 1 }, // tone down the 3D effect on small screens
-                  },
-                  640: {
-                    slidesPerView: 2,
-                  },
-                  1024: {
-                    slidesPerView: 3,
-                    coverflowEffect: {
-                      rotate: 30,
-                      depth: 30,
-                      modifier: 2,
-                    },
-                  },
-                  1280: {
-                    slidesPerView: 4,
-                  },
-                }}
-              >
-                {postImages.map((img) => (
-                  <SwiperSlide key={img.id}>
-                    <motion.div
-                      className="rounded-2xl w-96 h-72 shrink-0 cursor-grab"
-                      initial={{ scale: 0.7, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 1 }}
-                      viewport={{ once: false, amount: 0.5 }} // re-triggers each time 50% is visible
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                    >
-                      <img src={img.src} className="w-full h-full" />
-                    </motion.div>
-                  </SwiperSlide>
-                ))}
-                {/* {Array.from({ length: 6 }).map((_, i) => (
-                  <SwiperSlide key={i}>
-                    <motion.div
-                      className="bg-black/20 rounded-2xl w-80 h-96 shrink-0 cursor-grab"
-                      initial={{ scale: 0.7, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 1 }}
-                      viewport={{ once: false, amount: 0.5 }} // re-triggers each time 50% is visible
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                    >
-                      <img src={MEDIA.aboutTwo} className="w-full h-full" />
-                    </motion.div>
-                  </SwiperSlide>
-                ))} */}
-              </Swiper>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Community = () => {
-  const parent = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.5 },
-    },
-  };
-
-  const slideUp = {
-    hidden: { y: 40, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-  const zoomIn = {
-    hidden: { scale: 0.5, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
-
-  const container = {
-    hidden: {},
-    visible: {},
-  };
-
-  const tiltRight = {
-    hidden: { rotate: -12, opacity: 0 },
-    visible: {
-      rotate: 12,
-      opacity: 1,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
-
-  const tiltLeft = {
-    hidden: { rotate: 12, opacity: 0 },
-    visible: {
-      rotate: -12,
-      opacity: 1,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
-
-  return (
-    <section id="community overflow-hidden">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        variants={parent}
-        className="text-center pt-24 pb-12 px-8 md:px-16"
+      <section
+        className="hero relative flex items-end max-h-262.5 min-[790px] h-svh overflow-hidden"
+        id="top"
       >
-        <div className="">
-          <motion.h2
-            variants={slideUp} // reuse the shared variant instead of a literal object
-            className="font-extrabold text-3xl md:text-6xl text-primary tracking-tighter leading-7 lg:leading-14"
-          >
-            Meet the Community
-          </motion.h2>
-
-          <motion.p variants={slideUp} className="mt-2 max-w-xl mx-auto">
-            Our community is what makes De-glamour special. It's a place to feel
-            supported, encouraged and inspired to live a better and healthier
-            life.
-          </motion.p>
-        </div>
-
-        <motion.div
-          className="relative max-w-2xl mx-auto mt-8"
-          variants={container} // no initial/whileInView needed — inherits from the outer parent now
-        >
-          <motion.div
-            variants={tiltRight}
-            className="absolute w-36 border-4 border-white rounded-2xl overflow-hidden bottom-10 -right-5 z-10"
-          >
-            <img src={MEDIA.communityMan} className="w-full h-full" />
-          </motion.div>
-
-          <motion.div
-            variants={tiltLeft}
-            className="absolute w-36 border-4 border-white rounded-2xl overflow-hidden top-10 -left-5 z-10"
-          >
-            <img src={MEDIA.people} className="w-full h-full" />
-          </motion.div>
-
-          <motion.div variants={zoomIn} className="rounded-4xl overflow-hidden">
-            <img src={MEDIA.communityImg} className="w-full h-full" />
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </section>
-  );
-};
-
-const CharityAndCommunity = () => {
-  return (
-    <section>
-      <div className="pt-24 pb-12 px-8 md:px-16 flex flex-col lg:flex-row justify-center items-start gap-8">
-        <div className="">
-          <span className="inline-flex uppercase text-sm font-semibold text-primary border-b-4 border-green-light tracking-wide pb-2">
-            Charity & Community
-          </span>
-          <h2 className="font-bold text-3xl md:text-4xl text-primary mt-4">
-            More Than Fitness <br />
-            <span className="text-green-light">We Give Back</span>
-          </h2>
-          <p className="max-w-xl text-primary/80 mt-2">
-            At De-glamour aerobics, we believe in building stronger communities.
-            Through our charity initiatives, we support, uplift and create
-            opportunities for those in need - because a healthier community is a
-            happier one.
+        <img
+          className="hero__image absolute inset-0 w-full h-full"
+          src={hero}
+          alt="The De-glamour family moving together at sunset"
+        />
+        <div className="hero__shade absolute inset-0 w-full h-full" />
+        <div className="hero__content">
+          <p className="mb-4 inline-block -rotate-2 rounded-full bg-secondary px-4 py-1 text-sm font-extrabold uppercase text-secondary-foreground">
+            Suleja's loudest fitness family
           </p>
-          <a
-            href="tel:08033453412"
-            className="btn inline-flex items-center gap-4 mt-8"
-          >
-            Get Directions
-            <ArrowRightIcon />
-          </a>
-        </div>
-
-        <div className="relative mx-auto">
-          <div className="absolute -left-5 top-10 lg:-left-30 inline-flex gap-3 items-start bg-primary rounded-3xl p-4">
-            <div className="bg-green-light rounded-full p-2 overflow-hidden">
-              <HeartIcon size={15} />
-            </div>
-            <p className="px-2 flex flex-col">
-              <span className="text-green-light text-xs">Essential Items</span>
-              <span className="font-bold text-lg leading-5 text-green-light">
-                Distributed
-              </span>
-              <span className="text-green-light text-xs">
-                Food | Hygeine | School supplies
-              </span>
+          <h1 className="font-anton text-white font-anton text-[18vw] uppercase leading-[0.85] md:text-[11vw]">
+            We are
+            <br />
+            <span className="text-primary">them.</span>
+          </h1>
+          <div className="mt-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between font-bricolage-grotesque">
+            <p className="max-w-md text-lg text-muted-foreground">
+              Not a gym. Not a class. A family that sweats together, climbs
+              mountains together and shows up for the community — every single
+              time.
             </p>
-          </div>
-
-          <div className="absolute bottom-30 -right-5 lg:-right-30 inline-flex gap-3 items-start bg-primary rounded-3xl p-4">
-            <div className="bg-green-light rounded-full p-2 overflow-hidden">
-              <StarIcon size={30} />
-            </div>
-            <p className="px-2 flex flex-col">
-              <span className="text-green-light/60 text-xs">Continuous</span>
-              <span className="font-bold text-lg leading-5 text-green-light">
-                Support
-              </span>
-              <span className="text-green-light/60 text-xs">
-                For a better Nigeria
-              </span>
-            </p>
-          </div>
-          <div className="rounded-full overflow-hidden">
-            <video src={MEDIA.charity} autoPlay loop muted playsInline />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const CTA = () => {
-  return (
-    <section>
-      <div className="pt-24 pb-12 px-8 md:px-16 flex flex-col bg-[#eee]">
-        <div className="mx-auto text-center">
-          <h2 className="font-bold text-3xl md:text-4xl text-primary">
-            Be a part of something good
-          </h2>
-          <p className="max-w-xl mt-2">
-            We're not just about fitness - we're about creating a space where
-            people feel seen, supported, empowered to live healthier, happier
-            lives and have fun😁.
-          </p>
-          <a
-            href="https://www.facebook.com/profile.php?id=61591570243945"
-            target="_blank"
-            className={`btn inline-flex items-center gap-2 text-sm mt-4`}
-          >
-            <FacebookLogoIcon size={15} />
-            Follow us
-            <ArrowRightIcon size={15} />
-          </a>
-        </div>
-
-        <div className="flex items-center justify-center mt-12 flex-wrap">
-          <div className="w-64 -rotate-6 border-6 border-white rounded-2xl">
-            <img src={MEDIA.communityMan} className="w-full h-full" />
-          </div>
-          <div className="w-64 rotate-6 border-6 border-white rounded-2xl -ml-4 mt-3">
-            <img src={MEDIA.aboutTwo} className="w-full h-full" />
-          </div>
-          <div className="flex p-4 w-64 h-64 -rotate-6 bg-green-light rounded-2xl">
-            <p className="font-caveat text-5xl text-primary m-auto">
-              Big community, One family!
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const FindUs = () => {
-  return (
-    <section>
-      <div className="pt-24 pb-12 px-8 md:px-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="">
-          <span className="inline-flex uppercase text-sm font-semibold text-primary border-b-4 border-green-light tracking-wide pb-2">
-            Come train with us
-          </span>
-          <h2 className="font-bold text-3xl md:text-4xl text-primary mt-4">
-            Find us in Suleja
-          </h2>
-          <p className="max-w-xl text-primary/80 mt-2">
-            We'd love to have you at our sessions! Our community is always open,
-            welcoming new faces and creating a healthier, happier you.
-          </p>
-          <div className="flex items-start gap-2 max-w-lg mt-4">
-            <MapPinIcon className="text-green-light" size={40} />
             <a
-              href="https://maps.app.goo.gl/J9d9FSx4wX8KfhkW8"
-              target="_blank"
-              className="inline-flex text-xl text-primary/80 hover:text-green-light hover:underline"
+              className="w-fit rounded-full bg-primary px-8 py-4 text-lg font-extrabold uppercase text-primary-foreground shadow-[0_0_40px_-5px_#bdf520)] transition hover:scale-105"
+              href="#join"
             >
-              Old NNPC Guest House Opposite Gym N. Suleja, Nigeria
-            </a>
-          </div>
-
-          <div className="flex items-center gap-4 mt-8">
-            <a href="tel:08033453412" className="btn flex items-center gap-4">
-              Get Directions
-              <ArrowRightIcon />
-            </a>
-            <div className="h-4 w-px bg-primary/40"></div>
-            <a
-              href="tel:08033453412"
-              className="flex items-center gap-4 font-bold text-primary hover:text-green-light hover:underline"
-            >
-              <PhoneCallIcon size={20} />
-              08033453412
+              Come move with us <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
-        <div className="">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3938.344786771194!2d7.194985174154519!3d9.213424486076564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104dd1497481073b%3A0xd155da7b548a61ee!2sNNPC%20Guest%20House!5e0!3m2!1sen!2sng!4v1790062741912!5m2!1sen!2sng"
-            width="100%"
-            height="450"
-            style={{ border: 0 }}
-            allowFullscreen=""
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-          ></iframe>
-        </div>
-      </div>
-    </section>
-  );
-};
+        <span className="hero__index">SULEJA · NIGERIA / 01</span>
+      </section>
 
-const Footer = () => {
-  return (
-    <footer>
-      <div className="py-8 px-8 lg:pb-12 lg:pt-24 lg:px-16 flex justify-between items-center flex-wrap gap-y-8 bg-primary text-white">
-        <div className="flex flex-col gap-4 justify-between">
-          <a href="" className="flex gap-2 items-center">
-            <img
-              src={MEDIA.Logo}
-              alt="De-glamour aerobics logo"
-              className="w-16"
-            />
-            <span className="leading-none">
-              <span className="font-bold">De-glamour</span>
-              <br />
-              <span>aerobics</span>
+      <Marquee />
+
+      <section
+        className="grid gap-px bg-border md:grid-cols-3"
+        id="crew"
+        aria-label="Our community"
+      >
+        {[
+          ["20+", "Family members"],
+          ["3×", "Sessions weekly"],
+          ["∞", "Good vibes"],
+        ].map(([number, label]) => (
+          <div className="bg-background p-8 md:p-12 flex flex-col" key={label}>
+            <strong className="font-anton text-6xl tracking-wide text-primary md:text-7xl">
+              {number}
+            </strong>
+            <span className="mt-2 font-semibold uppercase text-muted-foreground">
+              {label}
             </span>
-          </a>
+          </div>
+        ))}
+      </section>
 
-          <p className="lg:max-w-lg">
-            A supportive fitness community where we move, grow and live
-            healthier - together.
+      <section className="px-5 py-24 md:px-10">
+        <div className="font-anton text-white mb-4">01 / WHAT WE’RE ABOUT</div>
+        <h2 className="font-anton text-white text-6xl uppercase leading-none md:text-8xl">
+          More than
+          <br />
+          <span className="text-outline">fitness.</span>
+        </h2>
+        <div className="mt-14 grid gap-5 md:grid-cols-3">
+          {activities.map((activity, index) => (
+            <article
+              className={`flex flex-col ${activity.styles}`}
+              key={activity.title}
+            >
+              <span className="font-anton">0{index + 1}</span>
+              <div className="mt-16">
+                <h3 className="font-anton text-5xl uppercase">
+                  {activity.title}
+                </h3>
+                <p className="mt-3 font-semibold">{activity.text}</p>
+              </div>
+              <span
+                className="flex ml-auto font-bold text-2xl"
+                aria-hidden="true"
+              >
+                ✳
+              </span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="relative" id="hikes">
+        <div className="absolute inset-0 bg-linear-to-r from-background via-background/70 to-transparent" />
+        <div className="max-w-2xl lg:max-w-full mx-auto relative py-25 px-8">
+          <img
+            src={hikeImg}
+            alt="The De-glamour crew hiking together on a rocky trail"
+            loading="lazy"
+            className="align-middle"
+          />
+          <p className="font-semibold uppercase tracking-widest text-secondary mt-8">
+            02 / Experiences
           </p>
-        </div>
-
-        <div className="hidden lg:block h-20 w-px bg-green-light"></div>
-
-        <div className="flex flex-col gap-2">
-          <span className="text-green-light inline-flex font-semibold">
-            LET'S TALK
-          </span>
+          <h2 className="mt-3 font-anton text-6xl text-white uppercase leading-none md:text-8xl">
+            Outdoors
+            <br />
+            are our
+            <br />
+            <span className="text-primary">gym too.</span>
+          </h2>
+          <p className="mt-6 text-lg text-foreground/85">
+            Every once in a while, we lace up, pack the water and hit the trails
+            around Suleja and beyond. Rocky climbs, sunrise summits, group
+            photos at the top and plenty of jokes on the way down. Beginners
+            welcome — nobody gets left behind; we climb at the pace of the
+            family.
+          </p>
           <a
-            href="mailto:osasgallanta@yahoo.com"
-            className="text-xl font-medium"
+            className="mt-8 inline-flex rounded-full border-2 border-primary px-7 py-3 font-extrabold uppercase text-primary transition hover:bg-primary hover:text-primary-foreground"
+            href={facebook}
+            target="_blank"
+            rel="noreferrer"
           >
-            osasgallanta@yahoo.com
-          </a>
-          <a
-            href="tel:08033453412"
-            className="flex items-center gap-4 text-xl font-medium hover:text-green-light hover:underline"
-          >
-            <PhoneCallIcon size={21} className="text-green-light" />
-            08033453412
+            Join us <span aria-hidden="true">↗</span>
           </a>
         </div>
-      </div>
-    </footer>
-  );
-};
+      </section>
 
-export default function Landing() {
-  return (
-    <>
-      <Header />
-      <Hero />
-      <About />
-      <Community />
-      <CharityAndCommunity />
-      <CTA />
-      <FindUs />
-      <Footer />
-    </>
+      <Marquee reverse />
+
+      <section
+        className="grid items-center gap-12 px-5 py-24 md:grid-cols-2 md:px-10"
+        id="charity"
+      >
+        <div className="relative">
+          <img
+            src={charity}
+            alt="De-glamour members sharing food packages during a community outreach"
+            loading="lazy"
+            className="aspect-square w-full -rotate-2 rounded-2xl object-cover"
+          />
+          <div className="absolute -bottom-6 -right-2 rotate-3 rounded-2xl bg-primary px-6 py-4 font-anton text-2xl uppercase text-primary-foreground md:-right-6">
+            Big community.
+            <br />
+            One family.
+          </div>
+        </div>
+        <div className="charity__copy">
+          <p className="font-semibold uppercase tracking-widest text-accent">
+            Charity & Community
+          </p>
+          <h2 className="mt-3 font-anton text-white text-6xl uppercase leading-none md:text-7xl">
+            We give
+            <br />
+            <span className="text-secondary">back.</span>
+          </h2>
+          <p className="mt-6 text-lg text-muted-foreground">
+            From food drives to supporting local families, De-glamour shows up
+            beyond the workout. Our outreaches bring the same energy we bring to
+            every session — because a healthy community is one that looks out
+            for each other.
+          </p>
+          <ul className="mt-8 space-y-3 font-semibold">
+            {[
+              "Food & essentials distribution",
+              "Community health walks",
+              "Support for families in need",
+            ].map((item) => (
+              <li
+                key={item}
+                className="flex items-center gap-3 text-white font-bold"
+              >
+                <span className="h-3 w-3 rounded-full bg-secondary"></span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section
+        className="mx-5 mb-10 rounded-[3rem] bg-primary px-6 py-20 text-primary-foreground md:mx-10 md:px-16"
+        id="join"
+      >
+        <h2 className="font-anton text-[14vw] uppercase leading-[0.85] md:text-[8vw]">
+          Pull up.
+          <br />
+          Get in.
+        </h2>
+        <div class="mt-10 grid gap-8 font-semibold md:grid-cols-3">
+          <div>
+            <div class="text-sm uppercase opacity-70">Where</div>
+            <p class="mt-1 text-xl">
+              Old NNPC Guest House, Opposite Gym N, Suleja, Nigeria
+            </p>
+          </div>
+          <div>
+            <div class="text-sm uppercase opacity-70">Call</div>
+            <a href="tel:08033453412" class="mt-1 block text-xl underline">
+              0803 345 3412
+            </a>
+          </div>
+          <div>
+            <div class="text-sm uppercase opacity-70">Email</div>
+            <a
+              href="mailto:osasgallanta@yahoo.com"
+              class="mt-1 block text-xl underline"
+            >
+              osasgallanta@yahoo.com
+            </a>
+          </div>
+        </div>
+        <a
+          href={facebook}
+          target="_blank"
+          rel="noreferrer"
+          class="mt-12 inline-block rounded-full bg-primary-foreground px-8 py-4 font-extrabold uppercase text-primary transition hover:scale-105"
+        >
+          Follow us on Facebook →
+        </a>
+      </section>
+
+      <footer class="flex flex-col justify-between gap-2 px-5 pb-10 text-sm text-muted-foreground md:flex-row md:px-10">
+        <span class="font-display text-lg uppercase text-foreground">
+          De-glamour Aerobics
+        </span>
+        <span>Move your body. Lift your mood. © 2026</span>
+      </footer>
+    </main>
   );
 }
