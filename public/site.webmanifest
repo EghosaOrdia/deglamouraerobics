@@ -1,6 +1,6 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Deglamour Aerobics",
+  "short_name": "deglamouraerobics",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
