@@ -34,13 +34,6 @@ body {
   background-color: var(--color-background);
 }
 
-.hero {
-  background-image: url("assets/hero-bg.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 @font-face {
   font-family: "Plus Jakarta";
   src: url("assets/PlusJakartaSans-VariableFont_wght.ttf");
