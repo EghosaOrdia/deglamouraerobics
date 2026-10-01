@@ -1,24 +1,24 @@
 import hero from "../assets/hero.jpg";
 import hikeImg from "../assets/hikeFlyer.jpeg";
-import charity from "../assets/charity.jpg";
+import { MEDIA } from "../lib/constants";
 
 const facebook = "https://www.facebook.com/profile.php?id=61591570243945";
 const activities = [
   {
     title: "Move",
-    text: "High-energy aerobics, full-body workouts and music loud enough to wake the whole street.",
+    text: "From high-energy aerobics to full-body workouts, our sessions are designed to keep you moving, motivated and feeling great.",
     styles:
       "bg-primary text-primary-foreground rounded-xl p-8 transition hover:-translate-y-2 ",
   },
   {
     title: "Explore",
-    text: "We trade the floor for the mountains — group hikes that test your legs and bond the crew.",
+    text: "We trade the floor for the outdoors — group hikes that test your legs and bond the crew.",
     styles:
       "bg-secondary text-secondary-foreground rounded-xl p-8 transition hover:-translate-y-2 md:translate-y-10",
   },
   {
     title: "Give",
-    text: "Outreach, food drives and support for families who need it. Strong bodies, bigger hearts.",
+    text: "Outreach and support for those who need it. Strong bodies, bigger hearts.",
     styles:
       "bg-accent text-accent-foreground rounded-xl p-8 transition hover:-translate-y-2 ",
   },
@@ -74,20 +74,19 @@ export default function App() {
           <p className="mb-4 inline-block -rotate-2 rounded-full bg-secondary px-4 py-1 text-sm font-extrabold uppercase text-secondary-foreground">
             Suleja's loudest fitness family
           </p>
-          <h1 className="font-anton text-white font-anton text-[18vw] uppercase leading-[0.85] md:text-[11vw]">
+          <h1 className="font-anton text-white text-[18vw] uppercase leading-[0.85] md:text-[11vw]">
             We are
             <br />
             <span className="text-primary">them.</span>
           </h1>
           <div className="mt-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between font-bricolage-grotesque">
             <p className="max-w-md text-lg text-muted-foreground">
-              Not a gym. Not a class. A family that sweats together, climbs
-              mountains together and shows up for the community — every single
-              time.
+              Not a gym. Not a class. A family that sweats together, moves
+              together and shows up for the community — every single time!
             </p>
             <a
               className="w-fit rounded-full bg-primary px-8 py-4 text-lg font-extrabold uppercase text-primary-foreground shadow-[0_0_40px_-5px_#bdf520)] transition hover:scale-105"
-              href="#join"
+              href={facebook}
             >
               Come move with us <span aria-hidden="true">→</span>
             </a>
@@ -194,12 +193,14 @@ export default function App() {
         id="charity"
       >
         <div className="relative">
-          <img
-            src={charity}
-            alt="De-glamour members sharing food packages during a community outreach"
-            loading="lazy"
+          <video
+            src={MEDIA.charity}
+            muted
+            autoPlay
+            loop
             className="aspect-square w-full -rotate-2 rounded-2xl object-cover"
           />
+
           <div className="absolute -bottom-6 -right-2 rotate-3 rounded-2xl bg-primary px-6 py-4 font-anton text-2xl uppercase text-primary-foreground md:-right-6">
             Big community.
             <br />
