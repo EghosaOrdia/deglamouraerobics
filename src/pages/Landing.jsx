@@ -1,11 +1,9 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { charityEvents, MEDIA, outDoors } from "../lib/constants";
 import {
-  Pause,
   PauseIcon,
   PlayIcon,
   SpeakerHighIcon,
-  SpeakerLowIcon,
   SpeakerNoneIcon,
 } from "@phosphor-icons/react";
 
