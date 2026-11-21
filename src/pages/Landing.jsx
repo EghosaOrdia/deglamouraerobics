@@ -1,6 +1,13 @@
-import hero from "../assets/hero.jpg";
-import hikeImg from "../assets/hikeFlyer.jpeg";
-import { MEDIA } from "../lib/constants";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { charityEvents, MEDIA, outDoors } from "../lib/constants";
+import {
+  Pause,
+  PauseIcon,
+  PlayIcon,
+  SpeakerHighIcon,
+  SpeakerLowIcon,
+  SpeakerNoneIcon,
+} from "@phosphor-icons/react";
 
 const facebook = "https://www.facebook.com/profile.php?id=61591570243945";
 const activities = [
@@ -45,6 +52,53 @@ function Marquee({ reverse = false }) {
 }
 
 export default function App() {
+  const [activeOutdoor, setActiveOutdoor] = useState(0);
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [activeCharity, setActiveCharity] = useState(0);
+  const [charityPaused, setCharityPaused] = useState(false);
+  const charityRefs = useRef([]);
+
+  const nextCharity = () =>
+    setActiveCharity((prev) => (prev + 1) % charityEvents.length);
+
+  // When the active slide changes: restart it, pause all the others
+  useEffect(() => {
+    charityRefs.current.forEach((video, i) => {
+      if (!video) return;
+      if (i === activeCharity) {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, [activeCharity]);
+
+  // Hover pauses and resumes the active slide only
+  useEffect(() => {
+    const video = charityRefs.current[activeCharity];
+    if (!video) return;
+    if (charityPaused) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  }, [charityPaused]);
+
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+  };
+
+  const toggleMute = () => setIsMuted((prev) => !prev);
+
   return (
     <main className="relative font-bricolage-grotesque">
       <header className="flex items-center justify-between py-4 px-8 fixed top-0 w-full z-50">
@@ -66,7 +120,7 @@ export default function App() {
       >
         <img
           className="hero__image absolute inset-0 w-full h-full"
-          src={hero}
+          src={MEDIA.hero}
           alt="The De-glamour family moving together at sunset"
         />
         <div className="hero__shade absolute inset-0 w-full h-full" />
@@ -151,38 +205,88 @@ export default function App() {
 
       <section className="relative" id="hikes">
         <div className="absolute inset-0 bg-linear-to-r from-background via-background/70 to-transparent" />
-        <div className="max-w-2xl lg:max-w-full mx-auto relative py-25 px-8">
-          <img
-            src={hikeImg}
-            alt="The De-glamour crew hiking together on a rocky trail"
-            loading="lazy"
-            className="align-middle"
-          />
-          <p className="font-semibold uppercase tracking-widest text-secondary mt-8">
-            02 / Experiences
-          </p>
-          <h2 className="mt-3 font-anton text-6xl text-white uppercase leading-none md:text-8xl">
-            Outdoors
-            <br />
-            are our
-            <br />
-            <span className="text-primary">gym too.</span>
-          </h2>
-          <p className="mt-6 text-lg text-foreground/85">
-            Every once in a while, we lace up, pack the water and hit the trails
-            around Suleja and beyond. Rocky climbs, sunrise summits, group
-            photos at the top and plenty of jokes on the way down. Beginners
-            welcome — nobody gets left behind; we climb at the pace of the
-            family.
-          </p>
-          <a
-            className="mt-8 inline-flex rounded-full border-2 border-primary px-7 py-3 font-extrabold uppercase text-primary transition hover:bg-primary hover:text-primary-foreground"
-            href={facebook}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Join us <span aria-hidden="true">↗</span>
-          </a>
+        <div className="relative py-25 px-8 gap-8 grid lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-6">
+            <p className="font-semibold uppercase tracking-widest text-secondary mt-8">
+              02 / Experiences
+            </p>
+            <h2 className="mt-3 font-anton text-6xl text-white uppercase leading-none md:text-8xl">
+              Outdoors
+              <br />
+              are our
+              <br />
+              <span className="text-primary">gym too.</span>
+            </h2>
+            <p className="mt-6 text-lg text-foreground/85">
+              Every once in a while, we lace up, pack the water and hit the
+              trails around Suleja and beyond. Rocky climbs, sunrise summits,
+              group photos at the top and plenty of jokes on the way down.
+              Beginners welcome — nobody gets left behind; we climb at the pace
+              of the family.
+            </p>
+            <a
+              className="mt-8 inline-flex rounded-full border-2 border-primary px-7 py-3 font-extrabold uppercase text-primary transition hover:bg-primary hover:text-primary-foreground"
+              href={facebook}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Join us <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+          <div className="lg:col-span-6">
+            <div className="grid grid-cols-4 items-start mb-8 gap-4">
+              {outDoors.map((activity) => (
+                <video
+                  key={activity.id}
+                  onClick={() => setActiveOutdoor(activity.id)}
+                  className={`rounded-xl border-4 duration-300 transition-all hover:border-primary cursor-pointer ${activity.id === activeOutdoor ? "border-primary" : "border-transparent"}`}
+                  src={activity.src}
+                  muted
+                />
+              ))}
+            </div>
+            <div className="relative rounded-3xl overflow-hidden">
+              <div className="absolute left-0 top-0 w-full p-4 flex gap-4 items-center">
+                <button
+                  onClick={togglePlay}
+                  className="bg-secondary rounded-full flex font-medium items-center p-3 transition-all duration-300 hover:bg-white hover:text-secondary cursor-pointer"
+                >
+                  {isPlaying ? <PauseIcon size={24} /> : <PlayIcon size={24} />}
+                </button>
+                <button
+                  onClick={toggleMute}
+                  className="bg-secondary rounded-full flex font-medium items-center p-3 transition-all duration-300 hover:bg-white hover:text-secondary cursor-pointer"
+                >
+                  {isMuted ? (
+                    <SpeakerNoneIcon size={24} />
+                  ) : (
+                    <SpeakerHighIcon size={24} />
+                  )}
+                </button>
+              </div>
+
+              {outDoors.map(
+                (activity) =>
+                  activity.id === activeOutdoor && (
+                    <Fragment key={activity.id}>
+                      <video
+                        ref={videoRef}
+                        className="w-full"
+                        src={activity.src}
+                        muted={isMuted}
+                        autoPlay
+                        loop
+                        onPlay={() => setIsPlaying(true)}
+                        onPause={() => setIsPlaying(false)}
+                      />
+                      <p className="absolute bottom-4 left-4 px-4 border-l-8 border-primary font-anton text-2xl w-full text-white">
+                        {activity.title}
+                      </p>
+                    </Fragment>
+                  ),
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -193,13 +297,41 @@ export default function App() {
         id="charity"
       >
         <div className="relative">
-          <video
-            src={MEDIA.charity}
-            muted
-            autoPlay
-            loop
-            className="aspect-square w-full -rotate-2 rounded-2xl object-cover"
-          />
+          <div
+            className="relative aspect-square w-full -rotate-2 overflow-hidden rounded-2xl"
+            onMouseEnter={() => setCharityPaused(true)}
+            onMouseLeave={() => setCharityPaused(false)}
+          >
+            {charityEvents.map((event, i) => (
+              <video
+                key={event.id}
+                ref={(el) => (charityRefs.current[i] = el)}
+                src={event.src}
+                muted
+                playsInline
+                autoPlay={i === 0}
+                onEnded={nextCharity}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                  i === activeCharity ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
+
+            <div className="absolute bottom-4 left-0 flex w-full justify-center gap-2">
+              {charityEvents.map((event, i) => (
+                <button
+                  key={event.id}
+                  onClick={() => setActiveCharity(i)}
+                  aria-label={`Show charity clip ${i + 1}`}
+                  className={`h-4 rounded-full transition-all duration-300 cursor-pointer ${
+                    i === activeCharity
+                      ? "w-8 bg-primary"
+                      : "w-4 bg-white/60 hover:bg-white"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
 
           <div className="absolute -bottom-6 -right-2 rotate-3 rounded-2xl bg-primary px-6 py-4 font-anton text-2xl uppercase text-primary-foreground md:-right-6">
             Big community.
@@ -207,6 +339,7 @@ export default function App() {
             One family.
           </div>
         </div>
+
         <div className="charity__copy">
           <p className="font-semibold uppercase tracking-widest text-accent">
             Charity & Community
@@ -249,24 +382,24 @@ export default function App() {
           <br />
           Get in.
         </h2>
-        <div class="mt-10 grid gap-8 font-semibold md:grid-cols-3">
+        <div className="mt-10 grid gap-8 font-semibold md:grid-cols-3">
           <div>
-            <div class="text-sm uppercase opacity-70">Where</div>
-            <p class="mt-1 text-xl">
+            <div className="text-sm uppercase opacity-70">Where</div>
+            <p className="mt-1 text-xl">
               Old NNPC Guest House, Opposite Gym N, Suleja, Nigeria
             </p>
           </div>
           <div>
-            <div class="text-sm uppercase opacity-70">Call</div>
-            <a href="tel:08033453412" class="mt-1 block text-xl underline">
+            <div className="text-sm uppercase opacity-70">Call</div>
+            <a href="tel:08033453412" className="mt-1 block text-xl underline">
               0803 345 3412
             </a>
           </div>
           <div>
-            <div class="text-sm uppercase opacity-70">Email</div>
+            <div className="text-sm uppercase opacity-70">Email</div>
             <a
               href="mailto:osasgallanta@yahoo.com"
-              class="mt-1 block text-xl underline"
+              className="mt-1 block text-xl underline"
             >
               osasgallanta@yahoo.com
             </a>
@@ -276,14 +409,14 @@ export default function App() {
           href={facebook}
           target="_blank"
           rel="noreferrer"
-          class="mt-12 inline-block rounded-full bg-primary-foreground px-8 py-4 font-extrabold uppercase text-primary transition hover:scale-105"
+          className="mt-12 inline-block rounded-full bg-primary-foreground px-8 py-4 font-extrabold uppercase text-primary transition hover:scale-105"
         >
           Follow us on Facebook →
         </a>
       </section>
 
-      <footer class="flex flex-col justify-between gap-2 px-5 pb-10 text-sm text-muted-foreground md:flex-row md:px-10">
-        <span class="font-display text-lg uppercase text-foreground">
+      <footer className="flex flex-col justify-between gap-2 px-5 pb-10 text-sm text-muted-foreground md:flex-row md:px-10">
+        <span className="font-display text-lg uppercase text-foreground">
           De-glamour Aerobics
         </span>
         <span>Move your body. Lift your mood. © 2026</span>
